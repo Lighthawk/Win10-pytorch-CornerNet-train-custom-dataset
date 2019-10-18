@@ -96,20 +96,19 @@ make
 
 ### （5）脑壳生疼放数据
 新数据集名称 `cancer`，图像放在 `<CornerNet_Lite dir>\data\cancer\images\`，标签在`<CornerNet_Lite dir>\data\cancer\annotations`。其中，`image` 文件夹下继续分 `train`，`eval`，`test` 三个文件夹存放对应图像，`annotations\` 放已转换COCO格式的标签json文件，分别为 `instances_train.json`，`instances_eval.json`，`instances_test.json`。<br>
-><CornerNet_Lite dir>\data\
->>cancer\
->>>annotations\
->>>>instances_train.json
->>>>instances_eval.json
->>>>instances_test.json
->>>images\
->>>>train\
->>>>eval\
->>>>test\
->>coco\
->>>PythonAPI\
->>>...
-**等下！为什么这样命名？用一张图来讲故事，是这样的：<br>**
+><CornerNet_Lite dir>\data\<br>
+>>cancer\<br>
+>>coco\<br>
+>>>annotations\<br>
+>>>>instances_train.json<br>
+>>>>instances_eval.json<br>
+>>>>instances_test.json<br>
+>>>images\<br>
+>>>>train\<br>
+>>>>eval\<br>
+>>>>test\<br>
+
+**...等下！为什么这样命名？用一张图来讲故事，是这样的：<br>**
 ![image](https://github.com/Lighthawk/CornerNet-train-win10-python/blob/master/images/004.jpg)<br>
 **故事讲完，`<CornerNet_Lite dir>/configs/CornerNet_Squeeze.json` 根据GPU性能简单改下 `batch_size=5`和`chunk_sizes=[5]`，cmd 下运行`python train.py CornerNet`出现下图就可以稍微歇下了**<br>
 ![image](https://github.com/Lighthawk/CornerNet-train-win10-python/blob/master/images/009.jpg)<br>
