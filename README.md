@@ -1,5 +1,5 @@
 # CornerNet train customed dataset on win10
-Blog, win10 修改 python 配置，训练自己的数据集
+win10 修改 python 配置，训练自己的数据集，核心是仿 COCO 数据集格式扩充自定义数据集
 
 ## 环境与配置
 * win10<br>
@@ -30,9 +30,9 @@ Blog, win10 修改 python 配置，训练自己的数据集
 
 ## 环境搭建过程
 ### （0）主要根据 [CornerNet-Lite](https://github.com/princeton-vl/CornerNet-Lite) 步骤做
-训练与验证之前，先更改下文件夹路径:
+训练与验证之前，先更改文件夹路径:
 ```Bash
- <CornerNet-Lite dir> -> <CornerNet_Lite dir>
+ <CornerNet-Lite dir> --->> <CornerNet_Lite dir>
 ```
 ### （1）检查 CornerNet-Lite 安装环境
 ```Bash
@@ -40,6 +40,11 @@ conda create --name CornerNet_Lite --file conda_packagelist.txt --channel pytorc
 source activate CornerNet_Lite
 ```
 这一步在win10上执行没好结果，关键是保证 Anaconda3 相关的工具包版本不要太低或过高。原计划如果这环境配置不合格，就写个 bat 更改各工具包至 conda_packagelist.txt 版本，结果没得逞。<br>
+```Bash
+# 2019-10-18，cmd 执行，各工具包版本合适
+conda update conda
+conda update --all
+```
 
 ### （2）编译 _cpools 和 NMS
 编译 Corner Pooling Layers：<br>
@@ -69,42 +74,42 @@ cd <CornerNet_Lite dir>\data\coco\PythonAPI
 ```
 目录下`coco.py`和`cocoeval.py`分别是 coco 数据集训练和验证的入口，我们训练自定义数据集的第一步就在这里扩充 datasets。我的数据集名字为`cancer`，遂分别复制这两个 py 为`cancer.py`和`cancereval.py`，文件名随意，自己区分好就OK。<br>
 ```diff
-# cancer.py，
+# cancer.py
 - line 70: 'class COCO:' 
 + line 70: 'class CANCER:'  # 作为后续 `<CornerNet_Lite dir>\core\dbs` 的 `datasets` 调用时的类名
 - line 303: 'res = COCO()'
 + line 303: 'res = CANCER()'  # 与 line 70 对应
 ```
 ```diff
-# 在 `cancereval.py` 中，
+# cancereval.py
 - line 10: 'class COCOeval:' 
 + line 10: 'class CANCEReval:'  # 同上作为后续调用时的类名
 ```
 
-### （4）放模型
-下面就要把数据和模型整理好，准备训练了。这里更改数据的路径和定义是最麻烦的，所以，我们先放模型... 模型[CornerNet-Lite](https://github.com/princeton-vl/CornerNet-Lite) 下载，丢在 `\CornerNet_Lite\cache\nnet\` 下即可，每个模型用同名文件夹包起来，训练时从这里读写 model，像这个样子：<br>
+### （4）轻松愉快放模型
+训练前模型和数据都要准备好，由于更改数据的路径和定义是最麻烦的，so，我们先放模型... 模型在[CornerNet-Lite](https://github.com/princeton-vl/CornerNet-Lite) 下载，丢在 `\CornerNet_Lite\cache\nnet\` 下即可，每个模型用同名文件夹包起来，训练时在这里读写 model，像这个样子：<br>
 ![image](https://github.com/Lighthawk/CornerNet-train-win10-python/blob/master/images/003.jpg)<br>
 嗯？！无法翻墙怎么下载模型？百度 'CornerNet 网盘' 一定找得到大佬的 orz。<br>
 
-### （5）麻烦的放数据
+### （5）脑壳生疼放数据
 新数据集名称 `cancer`，图像放在 `<CornerNet_Lite dir>\data\cancer\images\`，标签在`<CornerNet_Lite dir>\data\cancer\annotations`。其中，`image` 文件夹下继续分 `train`，`eval`，`test` 三个文件夹存放对应图像，`annotations\` 放已转换COCO格式的标签json文件，分别为 `instances_train.json`，`instances_eval.json`，`instances_test.json`。<br>
 **为什么这样命名？用一张图来讲故事，是这样的：<br>**
 ![image](https://github.com/Lighthawk/CornerNet-train-win10-python/blob/master/images/004.jpg)<br>
-**故事讲完，`<CornerNet_Lite dir>/configs/CornerNet_Squeeze.json` 简单改下 `batch_size=5`和`chunk_sizes=[5]`，cmd 下运行`python train.py CornerNet`出现下图就可以稍微歇下了**<br>
+**故事讲完，`<CornerNet_Lite dir>/configs/CornerNet_Squeeze.json` 根据GPU性能简单改下 `batch_size=5`和`chunk_sizes=[5]`，cmd 下运行`python train.py CornerNet`出现下图就可以稍微歇下了**<br>
 ![image](https://github.com/Lighthawk/CornerNet-train-win10-python/blob/master/images/009.jpg)<br>
 
 ### （6）几个小插曲
 **a) `"Device index must be -1 or non-negative, got -1160 "`**<br>
-GPU 没指定的问题，似乎是 CornerNet_Lite 单 GPU 并用默认的 model config 设置，batch_size and chunk_sizes 会有分配不到 GPU的情况，设置`batch_size=5, chunk_sizes=[5]`两个参数一样大。[参考link](https://github.com/princeton-vl/CornerNet/issues/4) ，往下拉找大拇指<br>
+没指定GPU，似乎是 CornerNet_Lite 单 GPU 并用默认的 model config 设置，batch_size and chunk_sizes 会有分配不到 GPU 的情况，设置`batch_size=5, chunk_sizes=[5]`两个参数一样大。[参考link](https://github.com/princeton-vl/CornerNet/issues/4) 往下拉找大拇指。<br>
 **b) 图像格式问题<br>**
 ![image](https://github.com/Lighthawk/CornerNet-train-win10-python/blob/master/images/005.jpg)<br>
-* 实际是没读入图像，需要检查以下几处：
-	* train.py 没有读到训练或验证的 image，注意图像是否放对，与，`annotations\*.json` 里是否对应；<br>
-	* `annotations\*.json` 里图像文件名是否正确；<br>
-	* 讲故事的里，详细修改参数的部分，路径是否正确。<br>
+实际是 train.py 没读入训练或验证集的图像，需要检查以下几处：
+* 转COCO格式时生成的 `annotations\*.json` 内部，图像文件名是否正确；<br>
+* 讲故事图，`cancer.py` line 38，`coco_dir`路径是否正确。<br>
+* 讲故事图，`cancer.py` line 40~46，与`annotations\` 文件夹下的 json 文件名是否对应；<br>
 **c) warning 刷屏**<br>
 ![image](https://github.com/Lighthawk/CornerNet-train-win10-python/blob/master/images/006.jpg)<br>
-顺利开始训练后，被刷满屏幕的 warning 给晃瞎了狗眼，在 train.py 里加入下面的代码，暂时屏蔽这些当前不影响训练的 warning。**这是暂时的！暂时的！暂时！建议后续修改代码后运行还是打开 python 的警告，出其他问题方便定位和排查。**<br>
+顺利开始训练后，被刷满屏幕的 warning 给晃瞎了狗眼，在 train.py 里加入下面的代码，暂时屏蔽这些当前不影响训练的 warning。**注意：这是暂时的！暂时的！暂时！建议后续修改代码后打开 python 的警告，出其他问题方便定位和排查。**<br>
 ```Python
 import warnings
 warnings.filterwarnings('ignore')
