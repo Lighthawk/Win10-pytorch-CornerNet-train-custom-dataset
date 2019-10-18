@@ -1,16 +1,16 @@
 # CornerNet train customed dataset on win10
-win10 修改 python 配置，训练自己的数据集，核心是仿 COCO 数据集格式扩充自定义数据集
+win10 python3.7，CornerNet-Lite 训练自己的数据集，核心是仿 COCO 数据集格式扩充自定义数据集
 
 ## 环境与配置
-* win10<br>
-* python 3.7<br>
 * CornerNet_Lite<br>
+* python 3.7<br>
 * Anaconda3<br>
-* GTX 1070<br>
 * Cygwin64<br>
+* win10<br>
+* GTX 1070<br>
 
 ## 吐槽
-* 最近参加天池图像处理比赛，从各种途径了解到超越 yolov3 的新工具 CornerNet-Lite 看起来很美丽，无奈╮(╯▽╰)╭ 几经折腾的 Ubuntu 已被玩坏，显卡驱动无法生效，安装并切换至旧内核也无解后，怒格之，空余的 1T 硬盘全部给了 Windows，并承担起这次比赛的数据仓库重任... （比赛压缩后图像200+G，1张图300~400M，这里面有点儿东西）。<br>
+* 最近参加天池图像处理比赛，从各种途径了解到超越 yolov3 的新工具 CornerNet-Lite，看起来很美丽，无奈╮(╯▽╰)╭ 几经折腾的 Ubuntu 已被玩坏，显卡驱动无法生效，安装并切换至旧内核也无解后，怒格之，空余的 1T 硬盘全部给了 Windows，并承担起这次比赛的数据仓库重任... （比赛压缩后图像200+G，1张图300~400M，这里面有点儿东西）。<br>
 * 于是... 我知道的，这一定是个天理不容的选择：在 windows 上做深度学习！但是，真的没办法，对于这个家里蹲、不能翻墙、显卡差点儿烧掉的电脑，我实在没有精力再重新给它折腾出一片 Ubuntu 的天地了，抱歉。<br>
 * 不过，作者并没明说操作系统的要求，应该不至于跟 win10 水火不容。网上只有 Ubuntu 训练自己数据集的方案，看来遇到问题要东拼西凑 + 读源码来解决了。<br>
 * **初次接触 CornerNet-Lite，有太多的不熟悉的地方，欢迎大家指正错误，各个方面的都欢迎！！！**<br>
@@ -104,10 +104,10 @@ CornerNet_Lite
 	    └───CornetNet_Squeeze  
 		    └───CornetNet_Squeeze_500000.pkl
 ```
-嗯？！无法翻墙怎么下载模型？百度 'CornerNet 网盘' 一定找得到大佬的 orz。<br>
+嗯？！无法翻墙怎么下载模型？百度 "CornerNet 网盘" 一定找得到大佬的 orz。<br>
 
 ### （5）脑壳生疼放数据
-增加新数据集在`<CornerNet_Lite dir>\core\dbs\`里作文章，新数据集名称 `cancer`，复制`coco.py`为`cancer.py`，是增加数据集主要更改的文件，复制`detectoin.py`为`detection_cancer.py`，搭建环境时暂不调整内部参数，具体调用过程还没看。新数据集图像放在 `<CornerNet_Lite dir>\data\cancer\images\`，标签在`<CornerNet_Lite dir>\data\cancer\annotations`。其中，`image` 文件夹下继续分 `train`，`eval`，`test` 三个文件夹存放对应图像，`annotations\` 放已转换COCO格式的标签json文件，分别为 `instances_train.json`，`instances_eval.json`，`instances_test.json`。<br>
+增加新数据集在`<CornerNet_Lite dir>\core\dbs\`里作文章，新数据集名称 `cancer`，复制`coco.py`为`cancer.py`，是增加数据集需要修改的文件，复制`detectoin.py`为`detection_cancer.py`，搭建环境时暂不调整内部参数。`__init__.py`增加新数据集索引，`cancer.py` 增加新 detection。新数据集图像放在 `<CornerNet_Lite dir>\data\cancer\images\`，标签在`<CornerNet_Lite dir>\data\cancer\annotations`。其中，`image` 文件夹下继续分 `train`，`eval`，`test` 三个文件夹存放对应图像，`annotations\` 放已转换COCO格式的标签json文件，分别为 `instances_train.json`，`instances_eval.json`，`instances_test.json`。<br>
 ```Bash
 CornerNet_Lite
 │   ..  
