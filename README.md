@@ -22,6 +22,7 @@ Blog, win10 修改 python 配置，训练自己的数据集
 * 不讲网络参数含义；<br>
 * 不讲自己数据转 COCO 数据集格式；<br>
 * 不讲翻墙与model下载；<br>
+* cmd 以管理员方式运行；<br>
 * **感谢3位大佬的链接，让我先对 Ubuntu 需要更改的地方有了一定的了解，然后再调整 win10 环境时少走了不少路，排名不分先后的三位大佬 blog：**<br>
 [在SeaShips数据集上训练CenterNet网络](https://blog.csdn.net/weixin_42634342/article/details/97756458)<br>
 [（绝对详细）CenterNet训练自己的数据（pytorch0.4.1）](https://blog.csdn.net/weixin_41765699/article/details/100118353)<br>
@@ -30,23 +31,27 @@ Blog, win10 修改 python 配置，训练自己的数据集
 
 ## 环境搭建过程
 ### （0）主要根据 [CornerNet-Lite](https://github.com/princeton-vl/CornerNet-Lite) 所说的步骤做<br>
-训练与验证之前，先更改下文件夹路径，<CornerNet-Lite dir> 改为 <CornerNet_Lite dir><br>
+训练与验证之前，先更改下文件夹路径，将 <CornerNet-Lite dir> 改为 <CornerNet_Lite dir><br>
 
 ### （1）检查 CornerNet-Lite 安装环境<br>
 ```Bash
 conda create --name CornerNet_Lite --file conda_packagelist.txt --channel pytorch
 source activate CornerNet_Lite
 ```
-这一步保证 Anaconda3 相关的工具包版本不要太低。原计划如果这里环境配置不合格，便 .bat 更改各工具包至 conda_packagelist.txt 版本，结果没得逞。<br>
+这一步在win10上执行没好结果，需要保证 Anaconda3 相关的工具包版本不要太低。原计划如果这里环境配置不合格，便写个 bat 更改各工具包至 conda_packagelist.txt 版本，结果没得逞。<br>
 
 ### （2）编译 _cpools 和 NMS<br>
 编译 Corner Pooling Layers：<br>
 ```Bash
+cd <CornerNet_Lite dir>/core/models/py_utils/_cpools
 python setup.py build_ext install
 ```
-编译 NMS 前要修改 setup.py 文件，[参考link](https://qiita.com/sounansu/items/6836e5a4d81e157941c2)推荐翻译为英文阅读<br>
+编译 NMS 前要修改 setup.py 文件，[参考link](https://qiita.com/sounansu/items/6836e5a4d81e157941c2)，推荐翻译为英文阅读<br>
+```Bash
+cd <CornerNet_Lite dir>/core/external
+```
 ```Python
-#extra_compile_args=["-Wno-cpp", "-Wno-unused-function"]
+# extra_compile_args=["-Wno-cpp", "-Wno-unused-function"]
 extra_compile_args={'gcc': ['/Qstd = c99']},
 ```
 
@@ -55,31 +60,30 @@ extra_compile_args={'gcc': ['/Qstd = c99']},
 ```Bash
  C:\ProgramData\Anaconda3\Lib\site-packages\pycocotools-2.0-py3.7-win-amd64.egg\pycocotools
 ```
-目录下可以看到`coco.py`和`cocoeval.py`分别是 coco 数据集训练和验证的入口。我们训练自定义数据集的第一步在这里扩充 datasets。我的数据集名字为`cancer`，则分别复制这两个 py 为`cancer.py`和`cancereval.py`，文件名随意，自己区分好就OK。<br>
+目录下可以看到`coco.py`和`cocoeval.py`分别是 coco 数据集训练和验证的入口。我们训练自定义数据集的第一步在这里扩充 datasets。我的数据集名字为`cancer`，遂分别复制这两个 py 为`cancer.py`和`cancereval.py`，文件名随意，自己区分好就OK。<br>
 ```diff
 # cancer.py，
 - line 70: 'class COCO:' 
-+ line 70: 'class CANCER:'  # * 作为后续 `<CornerNet_Lite dir>/core/dbs` 的 `datasets` 调用时的类名
++ line 70: 'class CANCER:'  # 作为后续 `<CornerNet_Lite dir>/core/dbs` 的 `datasets` 调用时的类名
 - line 303: 'res = COCO()'
-+ line 303: 'res = CANCER'  # 与 line 70 对应
++ line 303: 'res = CANCER()'  # 与 line 70 对应
 ```
 ```diff
 # 在 `cancereval.py` 中，
 - line 10: 'class COCOeval:' 
-+ line 10: 'class CANCEReval:'  # * 同样作为后续调用时的类名
++ line 10: 'class CANCEReval:'  # 同样作为后续调用时的类名
 ```
 
 ### （4）准备数据和模型<br>
-CornerNet-Lite 里后面就是将数据和模型整理好，并准备训练了。这里数据的位置和自定义更改是最麻烦的，所以，我们先放模型...模型安放很简单，丢在 `\CornerNet_Lite\cache\nnet\` 下即可，记得每个模型用模型名称的文件夹包起来。像这个样子：<br>
+CornerNet-Lite 里后面就是将数据和模型整理好，并准备训练了。这里更改数据的路径和定义是最麻烦的，所以，我们先放模型... 模型安放很简单，丢在 `\CornerNet_Lite\cache\nnet\` 下即可，记得每个模型用模型名称的文件夹包起来。像这个样子：<br>
 ![image](https://github.com/Lighthawk/CornerNet-train-win10-python/blob/master/images/003.jpg)<br>
-嗯？！无法翻墙怎么下载模型？推荐百度 'CornerNet 网盘'，一定找得到大佬的 orz。<br>
+嗯？！无法翻墙怎么下载模型？百度 'CornerNet 网盘' 一定找得到大佬的 orz。<br>
 
 ### （5）麻烦的放数据<br>
-我的数据集名字是 `cancer`，所以图像丢在了这个目录下 `<CornerNet_Lite dir>/data/cancer/images/`，标签在`<CornerNet_Lite dir>/data/cancer/annotations`
-其中，`image/` 文件夹下继续分 `train`，`eval`，`test` 三个文件夹存放对应图像，`annotations/` 放对应的标签.json，分别为 `instances_train.json`，`instances_eval.json`，`instances_test.json`。<br>
-为什么这样命名？用一张图来讲故事，应该是这样的：<br>
+新数据集是 `cancer`，图像放在 `<CornerNet_Lite dir>/data/cancer/images/`，标签在`<CornerNet_Lite dir>/data/cancer/annotations`。其中，`image/` 文件夹下继续分 `train`，`eval`，`test` 三个文件夹存放对应图像，`annotations/` 放标签的json文件，分别为 `instances_train.json`，`instances_eval.json`，`instances_test.json`。<br>
+为什么这样命名？用一张图来讲故事，是这样的：<br>
 ![image](https://github.com/Lighthawk/CornerNet-train-win10-python/blob/master/images/004.jpg)<br>
-**故事讲完了，出现下图就差不多可以歇了**<br>
+**故事讲完，`<CornerNet_Lite dir>/configs/CornerNet_Squeeze.json` 简单改下 `batch_size=5`和`chunk_sizes=[5]`，cmd 下运行`python train.py CornerNet`出现下图就可以稍微歇下了**<br>
 ![image](https://github.com/Lighthawk/CornerNet-train-win10-python/blob/master/images/009.jpg)<br>
 
 ### （6）之后还遇到了几个小插曲：<br>
