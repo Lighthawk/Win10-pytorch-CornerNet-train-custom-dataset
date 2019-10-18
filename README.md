@@ -25,9 +25,9 @@ win10 python3.7，CornerNet-Lite 训练自己的数据集，核心是仿 COCO �
 * 不讲翻墙与 model 下载<br>
 * 以管理员方式运行 cmd<br>
 * **感谢3位大佬的链接，让我先对 Ubuntu 需要更改的地方有一定的了解，然后再调整 win10 环境时少走了不少弯路，排名不分先后的三位大佬 blog：**<br>
-[在SeaShips数据集上训练CenterNet网络](https://blog.csdn.net/weixin_42634342/article/details/97756458)<br>
-[（绝对详细）CenterNet训练自己的数据（pytorch0.4.1）](https://blog.csdn.net/weixin_41765699/article/details/100118353)<br>
-[尝试CornerNet-Lite进行目标识别并嵌入ROS](https://blog.csdn.net/qq_25349629/article/details/89493192)<br>
+	* [在SeaShips数据集上训练CenterNet网络](https://blog.csdn.net/weixin_42634342/article/details/97756458)<br>
+	* [（绝对详细）CenterNet训练自己的数据（pytorch0.4.1）](https://blog.csdn.net/weixin_41765699/article/details/100118353)<br>
+	* [尝试CornerNet-Lite进行目标识别并嵌入ROS](https://blog.csdn.net/qq_25349629/article/details/89493192)<br>
 
 
 ## 环境搭建过程
