@@ -27,14 +27,14 @@ Cygwin64<br>
 ###（0）主要根据 [CornerNet-Lite](https://github.com/princeton-vl/CornerNet-Lite) 所说的步骤来，训练与验证之前，先更改下文件夹路径：<br>
 ![image](https://github.com/Lighthawk/CornerNet-train-win10-python/blob/master/images/008.jpg)<br>
 还有3位大佬的链接，让我先对 Ubuntu 需要更改的地方有了一定的了解，然后再调整 win10 环境时少走了不少路，排名不分先后的三位大佬 blog：<br>
-[在SeaShips数据集上训练CenterNet网络](https://blog.csdn.net/weixin_42634342/article/details/97756458)
-[（绝对详细）CenterNet训练自己的数据（pytorch0.4.1）](https://blog.csdn.net/weixin_41765699/article/details/100118353)
-[尝试CornerNet-Lite进行目标识别并嵌入ROS](https://blog.csdn.net/qq_25349629/article/details/89493192)
+[在SeaShips数据集上训练CenterNet网络](https://blog.csdn.net/weixin_42634342/article/details/97756458)<br>
+[（绝对详细）CenterNet训练自己的数据（pytorch0.4.1）](https://blog.csdn.net/weixin_41765699/article/details/100118353)<br>
+[尝试CornerNet-Lite进行目标识别并嵌入ROS](https://blog.csdn.net/qq_25349629/article/details/89493192)<br>
 
------
+
 ###（1）![image](https://github.com/Lighthawk/CornerNet-train-win10-python/blob/master/images/001.jpg)<br>
 这一步我保证了 Anaconda3 的插件包比较新，或者说这一步基本没管。原计划如果这里环境配置不合格，便 .bat 更改各工具包至 conda_packagelist.txt 版本，结果没得逞；<br>
------
+
 ###（2）![image](https://github.com/Lighthawk/CornerNet-train-win10-python/blob/master/images/002.jpg)<br>
 编译 Corner Pooling Layers 时，<br>
 ```Bash
@@ -45,7 +45,7 @@ python setup.py build_ext install
 #extra_compile_args=["-Wno-cpp", "-Wno-unused-function"]
 extra_compile_args={'gcc': ['/Qstd = c99']},
 ```
------
+
 ###（3）安装 MS COCO APIs，编译步骤同 NMS，更改 extra_compile_args。此时可以注意到，pycocotools 被安装到了 Anaconda3 里，具体路径如下：<br>
 ```Bash
  C:\ProgramData\Anaconda3\Lib\site-packages\pycocotools-2.0-py3.7-win-amd64.egg\pycocotools
@@ -57,11 +57,12 @@ line 70 'class COCO:' 改为 'class CANCER:'，作为后续 <CornerNet_Lite dir>
 line 303， 'res = COCO()' 改为 'res = CANCER'，与 line 70 对应。<br>
 在 cancereval.py 中，<br>
 line 10, 更改类名为 'CANCEReval'，同样作为后续调用时的类名
------
+
 ###（4）CornerNet-Lite 里后面就是将数据和模型整理好，并准备训练了。这里数据的位置和自定义更改是最麻烦的，所以，我们先放模型...<br>
 模型安放很简单，丢在 '\CornerNet_Lite\cache\nnet\' 下即可，记得每个模型用模型名称的文件夹包起来。像这个样子：<br>
 ![image](https://github.com/Lighthawk/CornerNet-train-win10-python/blob/master/images/003.jpg)<br>
 嗯？！无法翻墙怎么下载模型？推荐百度 'CornerNet 网盘'，一定找得到大佬的 orz。<br>
+
 ###（5）麻烦的放数据<br>
 我的数据集名字是 cancer，所以图像丢在了这个目录下 '<CornerNet_Lite dir>/data/cancer/images/'，标签在'<CornerNet_Lite dir>/data/cancer/annotations/'<br>
 其中，`image/` 文件夹下继续分 train，eval，test 三个文件夹存放对应图像，`annotations/` 放对应的标签.json，分别为 instances_train.json，instances_eval.json，instances_test.json。<br>
@@ -71,6 +72,7 @@ line 10, 更改类名为 'CANCEReval'，同样作为后续调用时的类名
 ![image](https://github.com/Lighthawk/CornerNet-train-win10-python/blob/master/images/004.jpg)<br>
 故事讲完了，出现下图就，差不多可以歇了。<br>
 ![image](https://github.com/Lighthawk/CornerNet-train-win10-python/blob/master/images/007.jpg)<br>
+
 ###（6）之后还遇到了几个小插曲：<br>
 a) "Device index must be -1 or non-negative, got -1160 ": GPU 没指定的问题，似乎是 CornerNet_Lite 默认 8 GPU并行，单 GPU 时用默认的 model config 设置， batch_size and chunk_sizes 会有分配不到 GPU的情况，设置 `batch_size=5 chunk_sizes=[5]` 两个参数一样大。解决参考 [link](https://github.com/princeton-vl/CornerNet/issues/4) 往下拉找大拇指。<br>
 b) ![image](https://github.com/Lighthawk/CornerNet-train-win10-python/blob/master/images/005.jpg)<br>
@@ -84,5 +86,6 @@ c)  ![image](https://github.com/Lighthawk/CornerNet-train-win10-python/blob/mast
 import warnings
 warnings.filterwarnings('ignore')
 ```
-d) 夜深了，准备歇，初次接触 CornerNet-Lite，有太多的不熟悉的地方，欢迎大家指正错误，各个方面的都欢迎。<br>
+d) `<CornerNet_Lite dir>/core/dbs/cancer.py ` 中自定义数据集的统计参数可以自行百度查找，当前还没写这一部分，经验为0；<br>
+n) 夜深了，准备歇，初次接触 CornerNet-Lite，有太多的不熟悉的地方，欢迎大家指正错误，各个方面的都欢迎。<br>
 
