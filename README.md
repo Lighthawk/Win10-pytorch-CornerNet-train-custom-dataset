@@ -36,7 +36,7 @@ win10 python3.7，CornerNet-Lite 训练自己的数据集，核心是仿 COCO �
 ```Bash
  <CornerNet-Lite dir> --->> <CornerNet_Lite dir>
 ```
-### （1）检查 CornerNet-Lite 安装环境
+### （1）检查 CornerNet-Lite 环境
 ```Bash
 conda create --name CornerNet_Lite --file conda_packagelist.txt --channel pytorch
 source activate CornerNet_Lite
