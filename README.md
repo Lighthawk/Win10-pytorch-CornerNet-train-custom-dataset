@@ -13,8 +13,9 @@ win10 修改 python 配置，训练自己的数据集，核心是仿 COCO 数据
 * 最近参加天池图像处理比赛，从各种途径了解到超越 yolov3 的新工具 CornerNet-Lite 看起来很美丽，无奈╮(╯▽╰)╭ 几经折腾的 Ubuntu 已被玩坏，显卡驱动无法生效，安装并切换至旧内核也无解后，怒格之，空余的 1T 硬盘全部给了 Windows，并承担起这次比赛的数据仓库重任... （比赛压缩后图像200+G，1张图300~400M，这里面有点儿东西）。<br>
 * 于是... 我知道的，这一定是个天理不容的选择：在 windows 上做深度学习！但是，真的没办法，对于这个家里蹲、不能翻墙、显卡差点儿烧掉的电脑，我实在没有精力再重新给它折腾出一片 Ubuntu 的天地了，抱歉。<br>
 * 不过，作者并没明说操作系统的要求，应该不至于跟 win10 水火不容。网上只有 Ubuntu 训练自己数据集的方案，看来遇到问题要东拼西凑 + 读源码来解决了。<br>
-* **初次接触 CornerNet-Lite，有太多的不熟悉的地方，欢迎大家指正错误，各个方面的都欢迎**<br>
-* ***第一次排版让人炸毛！！！***
+* **初次接触 CornerNet-Lite，有太多的不熟悉的地方，欢迎大家指正错误，各个方面的都欢迎！！！**<br>
+* **如果有帮助，可以网页右上戳下小五星(*^▽^*)**<br>
+* ***第一次排版让人炸毛(气歪)！！！***
 
 ## 前言
 * 不讲 Python、CUDA、CUDNN、Anaconda3 的安装<br>
@@ -95,13 +96,13 @@ make
 CornerNet_Lite
 │   ..  
 └───cache
-	  └───nnet
-			└───CornetNet
-			│ 		└───CornetNet_500000.pkl
-			└───CornetNet_Saccade  
-			│ 		└───CornetNet_Saccade_500000.pkl
-			└───CornetNet_Squeeze  
-					└───CornetNet_Squeeze_500000.pkl
+      └───nnet
+	    └───CornetNet
+	    │ 	    └───CornetNet_500000.pkl
+	    └───CornetNet_Saccade  
+	    │ 	    └───CornetNet_Saccade_500000.pkl
+	    └───CornetNet_Squeeze  
+		    └───CornetNet_Squeeze_500000.pkl
 ```
 嗯？！无法翻墙怎么下载模型？百度 'CornerNet 网盘' 一定找得到大佬的 orz。<br>
 
@@ -111,14 +112,14 @@ CornerNet_Lite
 CornerNet_Lite
 │   ..  
 └───data
-	  └───coco  
-	  └───cancer
-			└───annotations
-			│ 		└───instances_train.json，instances_eval.json，instances_test.json
-			└───images  
-				  └───train			
-				  └───eval			
-				  └───test
+      └───coco  
+      └───cancer
+	    └───annotations
+	    │ 	  └───instances_train.json，instances_eval.json，instances_test.json
+	    └───images  
+		  └───train			
+		  └───eval			
+		  └───test
 ```
 **...等下！为什么这样命名？用一张图来讲故事，是这样的：<br>**
 ![image](https://github.com/Lighthawk/CornerNet-train-win10-python/blob/master/images/004.jpg)<br>
