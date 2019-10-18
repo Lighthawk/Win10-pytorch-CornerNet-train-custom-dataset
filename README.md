@@ -14,8 +14,8 @@ win10 修改 python 配置，训练自己的数据集，核心是仿 COCO 数据
 * 于是... 我知道的，这一定是个天理不容的选择：在 windows 上做深度学习！但是，真的没办法，对于这个家里蹲、不能翻墙、显卡差点儿烧掉的电脑，我实在没有精力再重新给它折腾出一片 Ubuntu 的天地了，抱歉。<br>
 * 不过，作者并没明说操作系统的要求，应该不至于跟 win10 水火不容。网上只有 Ubuntu 训练自己数据集的方案，看来遇到问题要东拼西凑 + 读源码来解决了。<br>
 * **初次接触 CornerNet-Lite，有太多的不熟悉的地方，欢迎大家指正错误，各个方面的都欢迎！！！**<br>
-* **如果有帮助，可以网页右上戳下小五星(*^▽^*)**<br>
-* ***第一次排版让人炸毛(气歪)！！！***
+* **如果有帮助，可以网页右上戳下小五星(#^.^#)**<br>
+* ***第一次排版让人炸毛（气歪）！！！***
 
 ## 前言
 * 不讲 Python、CUDA、CUDNN、Anaconda3 的安装<br>
@@ -96,30 +96,30 @@ make
 CornerNet_Lite
 │   ..  
 └───cache
-      └───nnet
-	    └───CornetNet
-	    │ 	    └───CornetNet_500000.pkl
-	    └───CornetNet_Saccade  
-	    │ 	    └───CornetNet_Saccade_500000.pkl
-	    └───CornetNet_Squeeze  
-		    └───CornetNet_Squeeze_500000.pkl
+	  └───nnet
+		└───CornetNet
+		│ 		└───CornetNet_500000.pkl
+		└───CornetNet_Saccade  
+		│ 		└───CornetNet_Saccade_500000.pkl
+		└───CornetNet_Squeeze  
+				└───CornetNet_Squeeze_500000.pkl
 ```
 嗯？！无法翻墙怎么下载模型？百度 'CornerNet 网盘' 一定找得到大佬的 orz。<br>
 
 ### （5）脑壳生疼放数据
-新数据集名称 `cancer`，图像放在 `<CornerNet_Lite dir>\data\cancer\images\`，标签在`<CornerNet_Lite dir>\data\cancer\annotations`。其中，`image` 文件夹下继续分 `train`，`eval`，`test` 三个文件夹存放对应图像，`annotations\` 放已转换COCO格式的标签json文件，分别为 `instances_train.json`，`instances_eval.json`，`instances_test.json`。<br>
+增加新数据集在`<CornerNet_Lite dir>\core\dbs\`里作文章，新数据集名称 `cancer`，复制`coco.py`为`cancer.py`是增加数据集主要更改的文件，复制`detectoin.py`为`detection_cancer.py`，搭建环境时暂不调整内部参数，具体调用过程还没看。新数据集图像放在 `<CornerNet_Lite dir>\data\cancer\images\`，标签在`<CornerNet_Lite dir>\data\cancer\annotations`。其中，`image` 文件夹下继续分 `train`，`eval`，`test` 三个文件夹存放对应图像，`annotations\` 放已转换COCO格式的标签json文件，分别为 `instances_train.json`，`instances_eval.json`，`instances_test.json`。<br>
 ```Bash
 CornerNet_Lite
 │   ..  
 └───data
-      └───coco  
-      └───cancer
-	    └───annotations
-	    │ 	  └───instances_train.json，instances_eval.json，instances_test.json
-	    └───images  
-		  └───train			
-		  └───eval			
-		  └───test
+	  └───coco  
+	  └───cancer
+		└───annotations
+		│ 		└───instances_train.json，instances_eval.json，instances_test.json
+		└───images  
+			└───train			
+			└───eval			
+			└───test
 ```
 **...等下！为什么这样命名？用一张图来讲故事，是这样的：<br>**
 ![image](https://github.com/Lighthawk/CornerNet-train-win10-python/blob/master/images/004.jpg)<br>
