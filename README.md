@@ -129,7 +129,7 @@ CornerNet_Lite
 
 ### （6）几个小插曲
 **a) `"Device index must be -1 or non-negative, got -1160 "`**<br>
-没指定GPU，似乎是 CornerNet_Lite 单 GPU 并用默认的 model config 设置，batch_size and chunk_sizes 会有分配不到 GPU 的情况，设置`batch_size=5, chunk_sizes=[5]`两个参数一样大。[参考link](https://github.com/princeton-vl/CornerNet/issues/4) 往下拉找大拇指。<br>
+没指定GPU，似乎是 CornerNet_Lite 单 GPU 并用默认的 model config 设置，batch_size and chunk_sizes 会有分配不到 GPU 的情况，设置`batch_size=5, chunk_sizes=[5]`，原 CornerNet 中 chunk_sizes 表示分到每个 GPU 的图像个数，需要满足 batch_size == sum(chunk_sizes)。[参考link](https://github.com/princeton-vl/CornerNet/issues/4) 往下拉找大拇指。<br>
 **b) warning 刷屏**<br>
 ![image](https://github.com/Lighthawk/CornerNet-train-win10-python/blob/master/images/006.jpg)<br>
 顺利开始训练后，被刷满屏幕的 warning 给晃瞎了狗眼，在 train.py 里加入下面的代码，暂时屏蔽这些当前不影响训练的 warning。**注意：这是暂时的！暂时的！暂时！建议后续修改代码后打开 python 的警告，出其他问题方便定位和排查。**<br>
