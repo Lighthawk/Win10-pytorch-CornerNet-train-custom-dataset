@@ -1,9 +1,10 @@
 # CornerNet train customed dataset on win10
-win10 python3.7，CornerNet-Lite 训练自己的数据集，核心是仿 COCO 数据集格式扩充自定义数据集
+win10 pytorch1.2 python3.7，CornerNet-Lite 训练自己的数据集，核心是仿 COCO 数据集格式扩充自定义数据集
 
 ## 环境与配置
 * CornerNet_Lite<br>
 * python 3.7<br>
+* Pytorch 1.2<br>
 * Anaconda3<br>
 * Cygwin64<br>
 * win10<br>
