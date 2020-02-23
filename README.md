@@ -125,13 +125,13 @@ CornerNet_Lite
 **...等下！为什么这样命名？用一张图来讲故事，是这样的：<br>**
 ![image](https://raw.githubusercontent.com/Lighthawk/CornerNet-train-win10-python/blob/master/images/004.jpg)<br>
 **故事讲完，`<CornerNet_Lite dir>/configs/CornetNet_Saccade.json` 根据GPU性能简单改下 `batch_size=5`和`chunk_sizes=[5]`，cmd 下运行`python train.py CornetNet_Saccade`出现下图就可以稍微歇息了**<br>
-![image](https://github.com/Lighthawk/CornerNet-train-win10-python/blob/master/images/009.jpg)<br>
+![image](https://raw.githubusercontent.com/Lighthawk/CornerNet-train-win10-python/blob/master/images/009.jpg)<br>
 
 ### （6）几个小插曲
 **a) `"Device index must be -1 or non-negative, got -1160 "`**<br>
 没指定GPU，似乎是 CornerNet_Lite 单 GPU 并用默认的 model config 设置，batch_size and chunk_sizes 会有分配不到 GPU 的情况，设置`batch_size=5, chunk_sizes=[5]`，原 CornerNet 中 chunk_sizes 表示分到每个 GPU 的图像个数，需要满足 batch_size == sum(chunk_sizes)。[参考link](https://github.com/princeton-vl/CornerNet/issues/4) 往下拉找大拇指。<br>
 **b) warning 刷屏**<br>
-![image](https://github.com/Lighthawk/CornerNet-train-win10-python/blob/master/images/006.jpg)<br>
+![image](https://raw.githubusercontent.com/Lighthawk/CornerNet-train-win10-python/blob/master/images/006.jpg)<br>
 顺利开始训练后，被刷满屏幕的 warning 给晃瞎了狗眼，在 train.py 里加入下面的代码，暂时屏蔽这些当前不影响训练的 warning。**注意：这是暂时的！暂时的！暂时！建议后续修改代码后打开 python 的警告，出其他问题方便定位和排查。**<br>
 ```Python
 import warnings
@@ -139,7 +139,7 @@ warnings.filterwarnings('ignore')
 ```
 **c) `<CornerNet_Lite dir>/core/dbs/cancer.py ` 中自定义数据集的统计参数可以自行百度查找，当前还没写这一部分，经验为0**<br>
 **d) 图像格式问题<br>**
-![image](https://github.com/Lighthawk/CornerNet-train-win10-python/blob/master/images/005.jpg)<br>
+![image](https://raw.githubusercontent.com/Lighthawk/CornerNet-train-win10-python/blob/master/images/005.jpg)<br>
 实际是 train.py 没读入训练或验证集的图像，需要检查以下几处：
 * 转COCO格式时生成的 `annotations\*.json` 内部，图像文件名是否正确；<br>
 * 讲故事图，`cancer.py` line 38，`coco_dir`路径是否正确。<br>
