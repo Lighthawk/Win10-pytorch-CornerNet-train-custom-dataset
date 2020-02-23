@@ -123,7 +123,7 @@ CornerNet_Lite
 		  └───test
 ```
 **...等下！为什么这样命名？用一张图来讲故事，是这样的：<br>**
-![image](https://github.com/Lighthawk/CornerNet-train-win10-python/blob/master/images/004.jpg)<br>
+![image](https://raw.githubusercontent.com/Lighthawk/CornerNet-train-win10-python/blob/master/images/004.jpg)<br>
 **故事讲完，`<CornerNet_Lite dir>/configs/CornetNet_Saccade.json` 根据GPU性能简单改下 `batch_size=5`和`chunk_sizes=[5]`，cmd 下运行`python train.py CornetNet_Saccade`出现下图就可以稍微歇息了**<br>
 ![image](https://github.com/Lighthawk/CornerNet-train-win10-python/blob/master/images/009.jpg)<br>
 
